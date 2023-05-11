@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-// var authRoutes = require("./routes/auth");
-
+let authRoutes = require("./auth");
 const app = express();
 
 const { PORT } = require("./core/index");
@@ -26,7 +25,7 @@ app.use(
 
 app.use(express.json());
 app.use(morgan("short"));
-
+app.use("/auth", authRoutes);
 // =========================================================>
 
 app.post("/api/user", (req, res, next) => {
@@ -40,7 +39,7 @@ app.post("/api/user", (req, res, next) => {
 
     const newUser = new User({
       Name: req.body.Name,
-      Email: req.body.Number,
+      Email: req.body.Email,
       ContactNum: req.body.ContactNum,
       Password: req.body.Password,
       Role: req.body.Role // Admin / User
