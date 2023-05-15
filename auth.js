@@ -1,16 +1,15 @@
 const express = require("express");
 const {
-    User,
-    Token,
-    Company,
-    Visitor,
-    Franchise,
-  } = require("./dbmodule/module");
+  User,
+  Token,
+  Company,
+  Visitor,
+  Franchise,
+} = require("./dbmodule/module");
 let app = express.Router();
 
-
-
 app.post("/api/userLogin", (req, res, next) => {
+  // console.log(req.body.Email);
   if (!req.body.Email || !req.body.Password) {
     res.status(403).send(
       `please send email and passwod in json body.
@@ -22,7 +21,7 @@ app.post("/api/userLogin", (req, res, next) => {
     );
     return;
   }
-  User.findOne({Email: req.body.Email }, function (err, doc) {
+  User.find({ Email: req.body.Email }, function (err, doc) {
     // console.log(doc);
     if (!err) {
       if (req.body.password === doc.Password) {
@@ -86,8 +85,6 @@ app.post("/api/userLogin", (req, res, next) => {
 //     });
 //   }
 // });
-
-
 
 // =======================export
 module.exports = app;
