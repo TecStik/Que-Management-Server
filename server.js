@@ -28,8 +28,9 @@ app.use(morgan("short"));
 app.use("/auth", authRoutes);
 // =========================================================>
 
-app.post("/api/user", (req, res, next) => {
-  if (!req.body.Email || !req.body.ContactNum) {
+app.post("/api/rigester", (req, res, next) => {
+
+  if (!req.body.ContactNum) {
     res.status(409).send(` Please send Franchise Name  in json body
     e.g:
     "Please Provaide Email & Contact Number":"demo@gmail.com & 03000000000",
@@ -41,11 +42,45 @@ app.post("/api/user", (req, res, next) => {
       Name: req.body.Name,
       Email: req.body.Email,
       ContactNum: req.body.ContactNum,
+      LoginId: req.body.LoginId,
+      Password: req.body.Password,
+      Role: "Admin" // Admin / User
+    });
+
+    newUser.save().then((data) => {
+      res.send(data)
+      companyFun(data)
+    })
+      .catch((err) => {
+        res.status(500).send({ message: "an error occured :" + err });
+      })
+  }
+});
+
+// =========================================================>
+
+app.post("/api/CraeteUser", (req, res, next) => {
+
+  if (!req.body.ContactNum) {
+    res.status(409).send(` Please send Franchise Name  in json body
+    e.g:
+    "Please Provaide Email & Contact Number":"demo@gmail.com & 03000000000",
+`);
+    return;
+  } else {
+
+    const newUser = new User({
+      Name: req.body.Name,
+      Email: req.body.Email,
+      ContactNum: req.body.ContactNum,
+      LoginId: req.body.LoginId,
       Password: req.body.Password,
       Role: req.body.Role // Admin / User
     });
 
-    newUser.save().then((data) => { res.send(data) })
+    newUser.save().then((data) => {
+      res.send(data)
+    })
       .catch((err) => {
         res.status(500).send({ message: "an error occured :" + err });
       })
@@ -75,30 +110,48 @@ app.post("/api/user/get", (req, res, next) => {
 
 // =========================================================>
 
-app.post("/api/company", (req, res, next) => {
-  if (!req.body.Email || !req.body.ContactNum || !req.body.BelongTo) {
-    res.status(409).send(` Please send Franchise Name  in json body
-      e.g:
-      "Please Provaide Email & Contact Number":"demo@gmail.com , BelongTo & 03000000000",
-  `);
-    return;
-  } else {
+function companyFun(data) {
 
-    const newCompany = new Company({
-      Name: req.body.Name,
-      NTN: req.body.NTn,
-      Email: req.body.Email,
-      ContactNum: req.body.ContactNum,
-      BelongTo: req.body.BelongTo, // Admin Obj Id 
-      NumberOfFranchies: req.body.NumberOfFranchies
-    });
+  const newCompany = new Company({
+    Name: data.Name,
+    RegId: data.LoginId,
+    Email: data.Email,
+    ContactNum: data.ContactNum,
+    BelongTo: data._id, // Admin Obj Id 
+    NumberOfFranchies: 0
+  });
 
-    newCompany.save().then((data) => { res.send(data) })
-      .catch((err) => {
-        res.status(500).send({ message: "an error occured :" + err });
-      })
-  }
-});
+  newCompany.save().then((data) => { console.log(data, "Company Data") })
+    .catch((err) => {
+      res.status(500).send({ message: "an error occured :" + err });
+    })
+
+}
+
+// app.post("/api/company", (req, res, next) => {
+//   if (!req.body.Email || !req.body.ContactNum || !req.body.BelongTo) {
+//     res.status(409).send(` Please send Franchise Name  in json body
+//       e.g:
+//       "Please Provaide Email & Contact Number":"demo@gmail.com , BelongTo & 03000000000",
+//   `);
+//     return;
+//   } else {
+
+//     const newCompany = new Company({
+//       Name: req.body.Name,
+//       NTN: req.body.NTn,
+//       Email: req.body.Email,
+//       ContactNum: req.body.ContactNum,
+//       BelongTo: req.body.BelongTo, // Admin Obj Id 
+//       NumberOfFranchies: req.body.NumberOfFranchies
+//     });
+
+//     newCompany.save().then((data) => { res.send(data) })
+//       .catch((err) => {
+//         res.status(500).send({ message: "an error occured :" + err });
+//       })
+//   }
+// });
 
 // =========================================================>
 
@@ -169,7 +222,7 @@ app.post("/api/visitor/get", (req, res, next) => {
 // =========================================================>
 
 app.post("/api/franchise", (req, res, next) => {
-  if (!req.body.Email || !req.body.ContactNum) {
+  if (!req.body.ContactNum) {
     res.status(409).send(` Please send Franchise Name  in json body
       e.g:
       "Please Provaide Email & Contact Number":"demo@gmail.com  & 03000000000",
@@ -180,9 +233,11 @@ app.post("/api/franchise", (req, res, next) => {
     const newfranchise = new Franchise({
       Name: req.body.Name,
       Address: req.body.Address,
+      ContactNum: req.body.ContactNum,
+      ShortCode: req.body.ShortCode,
       BelongTo: req.body.BelongTo,
-      TokenCustomer: req.body.TokenCustomer,
-      CurrentToken: req.body.CurrentToken,
+      TokenNumber: 0,
+      CurrentToken: 0,
       StartTime: req.body.StartTime,
       EndTime: req.body.EndTime
     });
