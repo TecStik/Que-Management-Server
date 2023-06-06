@@ -233,13 +233,16 @@ app.post("/api/franchise", (req, res, next) => {
     const newfranchise = new Franchise({
       Name: req.body.Name,
       Address: req.body.Address,
-      ContactNum: req.body.ContactNum,
-      ShortCode: req.body.ShortCode,
       BelongTo: req.body.BelongTo,
+      ShortCode: req.body.ShortCode,
+      ContactNum: req.body.ContactNum,
+      ActiveFranchiseId: req.body.ActiveFranchiseId,
+      ManagerObjId: req.body.ManagerObjId,
+      StartTime: req.body.StartTime,
+      EndTime: req.body.EndTime,
+      Status: req.body.Status,
       TokenNumber: 0,
       CurrentToken: 0,
-      StartTime: req.body.StartTime,
-      EndTime: req.body.EndTime
     });
 
     newfranchise.save().then((data) => { res.send(data) })
@@ -249,6 +252,27 @@ app.post("/api/franchise", (req, res, next) => {
   }
 });
 
+
+//---------------------update filtered franchise
+
+app.post("/api/franchise/updateFiltered", (req, res, next) => {
+  if (!req.body.filter || !req.body.Update) {
+    res.status(409).send(`
+          Please send filter in json body
+          e.g:
+          "filter":"{}",
+      `);
+  } else {
+    Franchise.findOneAndUpdate(req.body.filter, req.body.Update, (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.status(500).send("error");
+      }
+    });
+  }
+});
+//----------------
 // =========================================================>
 
 app.post("/api/franchise/get", (req, res, next) => {

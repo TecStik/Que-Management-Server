@@ -71,7 +71,7 @@ let Visitor = mongoose.model("Visitors", VisitorSchema);
 // ==================>
 
 let FranchiseSchema = mongoose.Schema({
-  
+
   Name: String,
   Address: String,
   ContactNum: String,
@@ -81,8 +81,9 @@ let FranchiseSchema = mongoose.Schema({
   CurrentToken: String,
   StartTime: String,
   EndTime: String,
-
-  // ActiveFranchiseId: String,
+  Status: String,
+  ActiveFranchiseId: String,
+  ManagerObjId: String,
   //   AtmTime: String,
   //   CurrntTokenNumber: String,
   //   LastIssueNumber: String,
