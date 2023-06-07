@@ -97,8 +97,11 @@ let Franchise = mongoose.model("Franchise", FranchiseSchema);
 let TokenSchema = mongoose.Schema({
   FranchiseId: String,
   TokenNumber: String,
-  IssueTime: String,
-  AttendedTime: String,
+  Name:String,
+  ContactNum:String,
+  VisitorObjId:String,
+  IssueTime: String ,
+  AttendTime: String,
 });
 
 let Token = mongoose.model("Tokens", TokenSchema);

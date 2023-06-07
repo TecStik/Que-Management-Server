@@ -306,25 +306,27 @@ app.post("/api/token", (req, res, next) => {
 `);
     return;
   } else {
-    Franchise.findById({ _id: req.body.FranchiseId },
+    Franchise.findOne({ _id: req.body.FranchiseId },
       (err, doc) => {
         if (!err) {
-          newNumber = parseInt(doc.CurrntTokenNumber) + 1;
-          doc.CurrntTokenNumber = newNumber;
 
-          const newfranchise = new Franchise({
-            TokenNumber: TokenNumber, //newNumber
-            IssueTime: req.body.IssueTime,
+          newNumber = parseInt(doc.TokenNumber) + 1;
+          doc.TokenNumber = newNumber;
+          doc.save()
+
+          const newTokenNumber = new Token({
             FranchiseId: req.body.FranchiseId,
-            AttendedTime: req.body.AttendedTime,
+            TokenNumber: newNumber,
+            Name: req.body.Name,
+            ContactNum: req.body.ContactNum,
+            VisitorObjId: req.body.VisitorObjId,
+            IssueTime: new Date().toLocaleTimeString(),
+            AttendTime: "",
+
           });
 
-          //   newToken.save();
-          //   doc.Token.push(newToken);
-          //   doc.save();
-          //   res.send(doc);
 
-          newfranchise.save().then((data) => { res.send(data) }).catch((error) => {
+          newTokenNumber.save().then((data) => { res.send(data) }).catch((error) => {
             res.status(500).send({
               message: "an error occured : " + error,
             });
