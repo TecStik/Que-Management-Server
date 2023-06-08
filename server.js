@@ -26,7 +26,9 @@ app.use(
 app.use(express.json());
 app.use(morgan("short"));
 app.use("/auth", authRoutes);
+
 // =========================================================>
+//--------------------- Create Rigester API
 
 app.post("/api/rigester", (req, res, next) => {
 
@@ -58,6 +60,7 @@ app.post("/api/rigester", (req, res, next) => {
 });
 
 // =========================================================>
+//--------------------- Create USER API
 
 app.post("/api/CraeteUser", (req, res, next) => {
 
@@ -74,6 +77,7 @@ app.post("/api/CraeteUser", (req, res, next) => {
       Email: req.body.Email,
       ContactNum: req.body.ContactNum,
       LoginId: req.body.LoginId,
+      CraetedBy: req.body.CraetedBy,
       Password: req.body.Password,
       Role: req.body.Role // Admin / User
     });
@@ -88,9 +92,11 @@ app.post("/api/CraeteUser", (req, res, next) => {
 });
 
 // =========================================================>
+//--------------------- Fileter User API
 
 app.post("/api/user/get", (req, res, next) => {
   console.log(req.body.filter);
+  
   if (!req.body.filter) {
     res.status(409).send(`
         Please send filter in json body
@@ -109,6 +115,7 @@ app.post("/api/user/get", (req, res, next) => {
 });
 
 // =========================================================>
+//--------------------- Campany Funcation 
 
 function companyFun(data) {
 
@@ -128,32 +135,8 @@ function companyFun(data) {
 
 }
 
-// app.post("/api/company", (req, res, next) => {
-//   if (!req.body.Email || !req.body.ContactNum || !req.body.BelongTo) {
-//     res.status(409).send(` Please send Franchise Name  in json body
-//       e.g:
-//       "Please Provaide Email & Contact Number":"demo@gmail.com , BelongTo & 03000000000",
-//   `);
-//     return;
-//   } else {
-
-//     const newCompany = new Company({
-//       Name: req.body.Name,
-//       NTN: req.body.NTn,
-//       Email: req.body.Email,
-//       ContactNum: req.body.ContactNum,
-//       BelongTo: req.body.BelongTo, // Admin Obj Id 
-//       NumberOfFranchies: req.body.NumberOfFranchies
-//     });
-
-//     newCompany.save().then((data) => { res.send(data) })
-//       .catch((err) => {
-//         res.status(500).send({ message: "an error occured :" + err });
-//       })
-//   }
-// });
-
 // =========================================================>
+//--------------------- Filter Company API
 
 app.post("/api/company/get", (req, res, next) => {
   if (!req.body.filter) {
@@ -173,9 +156,8 @@ app.post("/api/company/get", (req, res, next) => {
   }
 });
 
-
-
 // =========================================================>
+//---------------------Create Visitor API
 
 app.post("/api/visitor", (req, res, next) => {
   if (!req.body.Email || !req.body.ContactNum) {
@@ -200,6 +182,7 @@ app.post("/api/visitor", (req, res, next) => {
 });
 
 // =========================================================>
+//---------------------filter Visitor API
 
 app.post("/api/visitor/get", (req, res, next) => {
   if (!req.body.filter) {
@@ -220,6 +203,7 @@ app.post("/api/visitor/get", (req, res, next) => {
 });
 
 // =========================================================>
+//---------------------Create Franchise API
 
 app.post("/api/franchise", (req, res, next) => {
   if (!req.body.ContactNum) {
@@ -252,7 +236,7 @@ app.post("/api/franchise", (req, res, next) => {
   }
 });
 
-
+// =========================================================>
 //---------------------update filtered franchise
 
 app.post("/api/franchise/updateFiltered", (req, res, next) => {
@@ -272,8 +256,9 @@ app.post("/api/franchise/updateFiltered", (req, res, next) => {
     });
   }
 });
-//----------------
+
 // =========================================================>
+//---------------------Filter Franchise API 
 
 app.post("/api/franchise/get", (req, res, next) => {
   if (!req.body.filter) {
@@ -294,7 +279,7 @@ app.post("/api/franchise/get", (req, res, next) => {
 });
 
 // =========================================================>
-
+//---------------------Craete Topken API
 
 app.post("/api/token", (req, res, next) => {
   var newNumber = 0;
@@ -339,7 +324,7 @@ app.post("/api/token", (req, res, next) => {
   }
 });
 
-
+//---------------------Tokent Filter API
 
 app.post("/api/token/get", (req, res, next) => {
   if (!req.body.filter) {
@@ -367,31 +352,27 @@ app.listen(PORT, () => {
 
 
 
-// get All Data FranchiseObjectID in Token number
+// app.post("/api/company", (req, res, next) => {
+//   if (!req.body.Email || !req.body.ContactNum || !req.body.BelongTo) {
+//     res.status(409).send(` Please send Franchise Name  in json body
+//       e.g:
+//       "Please Provaide Email & Contact Number":"demo@gmail.com , BelongTo & 03000000000",
+//   `);
+//     return;
+//   } else {
 
-// app.post("/getTokenNumber", (req, res) => {
-//   Token.find(
-//     { FranchiseObjectID: req.body.FranchiseObjectID },
+//     const newCompany = new Company({
+//       Name: req.body.Name,
+//       NTN: req.body.NTn,
+//       Email: req.body.Email,
+//       ContactNum: req.body.ContactNum,
+//       BelongTo: req.body.BelongTo, // Admin Obj Id 
+//       NumberOfFranchies: req.body.NumberOfFranchies
+//     });
 
-//     (err, data) => {
-//       if (!err) {
-//         res.send(data);
-//       } else {
-//         res.status(500).send("error");
-//       }
-//     }
-//   );
+//     newCompany.save().then((data) => { res.send(data) })
+//       .catch((err) => {
+//         res.status(500).send({ message: "an error occured :" + err });
+//       })
+//   }
 // });
-
-//delete  Api with Token
-
-// app.delete("/tokenData/:id", (req, res, next) => {
-//   Token.findByIdAndRemove({ _id: req.params.id }, (err, doc) => {
-//     if (!err) {
-//       res.send("Token hase been deleted");
-//     } else {
-//       res.status(500).send("error happened");
-//     }
-//   });
-// });
-

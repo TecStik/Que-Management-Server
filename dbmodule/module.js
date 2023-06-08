@@ -40,6 +40,7 @@ let UserSchema = mongoose.Schema({
   ContactNum: String,
   LoginId: String,
   Password: String,
+  CraetedBy: String,
   Role: String, // Admin User
 });
 
@@ -84,6 +85,7 @@ let FranchiseSchema = mongoose.Schema({
   Status: String,
   ActiveFranchiseId: String,
   ManagerObjId: String,
+  ManagerName: String,
   //   AtmTime: String,
   //   CurrntTokenNumber: String,
   //   LastIssueNumber: String,
@@ -97,10 +99,10 @@ let Franchise = mongoose.model("Franchise", FranchiseSchema);
 let TokenSchema = mongoose.Schema({
   FranchiseId: String,
   TokenNumber: String,
-  Name:String,
-  ContactNum:String,
-  VisitorObjId:String,
-  IssueTime: String ,
+  Name: String,
+  ContactNum: String,
+  VisitorObjId: String,
+  IssueTime: String,
   AttendTime: String,
 });
 
