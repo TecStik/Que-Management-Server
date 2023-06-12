@@ -104,6 +104,7 @@ let TokenSchema = mongoose.Schema({
   VisitorObjId: String,
   IssueTime: String,
   AttendTime: String,
+  Status:String
 });
 
 let Token = mongoose.model("Tokens", TokenSchema);

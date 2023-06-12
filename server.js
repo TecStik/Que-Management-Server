@@ -96,7 +96,7 @@ app.post("/api/CraeteUser", (req, res, next) => {
 
 app.post("/api/user/get", (req, res, next) => {
   console.log(req.body.filter);
-  
+
   if (!req.body.filter) {
     res.status(409).send(`
         Please send filter in json body
@@ -225,6 +225,7 @@ app.post("/api/franchise", (req, res, next) => {
       StartTime: req.body.StartTime,
       EndTime: req.body.EndTime,
       Status: req.body.Status,
+      ManagerName: "",
       TokenNumber: 0,
       CurrentToken: 0,
     });
@@ -305,6 +306,7 @@ app.post("/api/token", (req, res, next) => {
             Name: req.body.Name,
             ContactNum: req.body.ContactNum,
             VisitorObjId: req.body.VisitorObjId,
+            Status: req.body.Status,
             IssueTime: new Date().toLocaleTimeString(),
             AttendTime: "",
 
@@ -344,6 +346,32 @@ app.post("/api/token/get", (req, res, next) => {
   }
 });
 
+//---------------------Update Tokent API
+
+app.post("/api/UpdateToken", (req, res, next) => {
+
+  if (!req.body.filter || !req.body.Update) {
+    res.status(409).send(`
+          Please send filter in json body
+          e.g:
+          "filter":"{}",
+      `);
+  } else {
+    Token.findOneAndUpdate(req.body.filter, req.body.Update, (err, data) => {
+      if (!err) {
+        res.send({
+          data: data,
+          message: "Token Update",
+          status: 200
+        });
+      } else {
+        res.status(500).send("error");
+      }
+    });
+  }
+});
+
+
 // =========================================================>
 
 app.listen(PORT, () => {
@@ -366,7 +394,7 @@ app.listen(PORT, () => {
 //       NTN: req.body.NTn,
 //       Email: req.body.Email,
 //       ContactNum: req.body.ContactNum,
-//       BelongTo: req.body.BelongTo, // Admin Obj Id 
+//       BelongTo: req.body.BelongTo, // Admin Obj Id
 //       NumberOfFranchies: req.body.NumberOfFranchies
 //     });
 
